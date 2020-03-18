@@ -1,6 +1,7 @@
 from Runtime import Runtime
 from PlayerShip import PlayerShip
 from Asteroid import Asteroid
+from Stars import Stars
 
 runtime = Runtime()
 runtime.master.title("Hello World")
@@ -13,6 +14,9 @@ asteroid2 = Asteroid(runtime.main_canvas,900,500)
 runtime.render_list.append(asteroid1)
 runtime.render_list.append(asteroid2)
 runtime.render_list.append(player)
+
+star = Stars(runtime.main_canvas,0,0)
+runtime.render_list.append(star)
 
 
 

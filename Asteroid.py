@@ -20,23 +20,17 @@ class Asteroid:
         self.coords = self.points.copy()
         self.img = canvas.create_polygon(self.points, outline="yellow", width=3)
 
-    def render(self, canvas: Canvas,rotation,playerx,playery):
+    def render(self, canvas: Canvas, rotation, playerx, playery):
         i = 0
         r = math.radians(rotation)
-        addx = playerx - Runtime.SCREEN_X/2
-        addy = playery - Runtime.SCREEN_Y/2
+        addx = playerx - Runtime.SCREEN_X / 2
+        addy = playery - Runtime.SCREEN_Y / 2
 
         for x, y in zip(self.points[::2], self.points[1::2]):
-            #xx = x - Runtime.SCREEN_X/2
-            #yy = y - Runtime.SCREEN_Y/2
-            #self.coords[i] = xx * math.cos(r) + yy * math.sin(r) + Runtime.SCREEN_X /2
-            #self.coords[i + 1] = -xx * math.sin(r) + yy * math.cos(r) + Runtime.SCREEN_Y /2
-            xx = x - playerx #- Runtime.SCREEN_X/2
-            yy = y - playery # Runtime.SCREEN_Y/2
-            self.coords[i] = xx * math.cos(r) + yy * math.sin(r) + playerx -addx#+Runtime.SCREEN_X/2
-            self.coords[i + 1] = -xx * math.sin(r) + yy * math.cos(r) + playery-addy #+Runtime.SCREEN_Y/2
-            #self.coords[i] =self.coords[i] + addx
-            #self.coords[i + 1] = self.coords[i + 1] + addy
+            xx = x - playerx
+            yy = y - playery
+            self.coords[i] = xx * math.cos(r) + yy * math.sin(r) + playerx - addx
+            self.coords[i + 1] = -xx * math.sin(r) + yy * math.cos(r) + playery - addy
 
             i = i + 2
 
