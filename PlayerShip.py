@@ -6,6 +6,7 @@ import math
 class PlayerShip:
     pressedStatus = {"Left": False, "Right": False, "space": False, "Shift_L": False, "Up": False, "Down": False,
                      "Escape": False}
+    speed = 2
 
     def __init__(self, canvas: Canvas, x, y, runtime: Runtime):
         self.x = x
@@ -34,8 +35,8 @@ class PlayerShip:
 
         if PlayerShip.pressedStatus["Shift_L"]:
             r = math.radians(self.rotation - 90)
-            self.x = self.x + 1 * math.cos(r)
-            self.y = self.y + 1 * math.sin(r)
+            self.x = self.x + self.speed * math.cos(r)
+            self.y = self.y + self.speed * math.sin(r)
 
     def pressed(event):
         PlayerShip.pressedStatus[event.keysym] = True
