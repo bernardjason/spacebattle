@@ -1,20 +1,25 @@
 from tkinter import *
 import Runtime
 import math
+from Torpedo import Torpedo
 
 
 class PlayerShip:
     pressedStatus = {"Left": False, "Right": False, "space": False, "Shift_L": False, "Up": False, "Down": False,
                      "Escape": False}
     speed = 2
+    DONT_REPEAT = 60
+    dont_repeat = DONT_REPEAT
 
     def __init__(self, canvas: Canvas, x, y, runtime: Runtime):
         self.x = x
         self.y = y
+        self.middlex = 50
+        self.middley = 50
 
-        self.points = [self.x + 0, self.y + 0,
-                       self.x + 50, self.y - 100,
-                       self.x + 100, self.y + 0]
+        self.points = [self.x - self.middlex, self.y + self.middley,
+                       self.x , self.y - self.middley,
+                       self.x + self.middlex, self.y + self.middley]
         self.coords = self.points.copy()
         self.img = canvas.create_polygon(self.points, outline="white", width=1)
 
@@ -37,6 +42,18 @@ class PlayerShip:
             r = math.radians(self.rotation - 90)
             self.x = self.x + self.speed * math.cos(r)
             self.y = self.y + self.speed * math.sin(r)
+
+        if PlayerShip.pressedStatus["space"] and self.dont_repeat > 0:
+            self.dont_repeat = - self.DONT_REPEAT
+            r = math.radians(self.rotation-90)
+            dirx = math.cos(r)
+            diry = math.sin(r)
+            t = Torpedo(self.runtime.main_canvas,self.rotation-270,self.x,self.y,dirx,diry)
+            self.runtime.render_list.append(t)
+            self.runtime.torpedos.append(t)
+
+        self.dont_repeat = self.dont_repeat + 1
+        return True
 
     def pressed(event):
         PlayerShip.pressedStatus[event.keysym] = True

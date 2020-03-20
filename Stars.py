@@ -49,3 +49,4 @@ class Stars:
         for i in range(0, self.stars * 4, 4):
             star = self.img[int(i / 4)]
             canvas.coords(star, self.coords[i:i + 4])
+        return True

@@ -4,7 +4,6 @@ from Runtime import Runtime
 
 
 class Asteroid:
-    rotateAngle = 0.0
 
     def __init__(self, canvas: Canvas, x, y):
         self.x = x
@@ -35,4 +34,4 @@ class Asteroid:
             i = i + 2
 
         canvas.coords(self.img, self.coords)
-        self.rotateAngle = self.rotateAngle + 1
+        return True

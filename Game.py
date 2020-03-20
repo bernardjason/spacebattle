@@ -13,12 +13,12 @@ for xx in range(int(-Runtime.SCREEN_X ), int(Runtime.SCREEN_X*1.5), int(Runtime.
     for yy in range(int(-Runtime.SCREEN_Y ), int(Runtime.SCREEN_Y*1.5), int(Runtime.SCREEN_Y / 2)):
         asteroid = Asteroid(runtime.main_canvas, xx, yy)
         runtime.render_list.append(asteroid)
+        runtime.asteroids.append(asteroid)
 
 runtime.render_list.append(player)
 
 for xx in range(int(-Runtime.SCREEN_X / 2), int(Runtime.SCREEN_X), int(Runtime.SCREEN_X / 2)):
     for yy in range(int(-Runtime.SCREEN_Y / 2), int(Runtime.SCREEN_Y), int(Runtime.SCREEN_Y / 2)):
-        print(xx,yy)
         star = Stars(runtime.main_canvas, xx, yy)
         runtime.render_list.append(star)
         runtime.stars.append(star)
