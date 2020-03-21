@@ -8,7 +8,7 @@ class PlayerShip:
     pressedStatus = {"Left": False, "Right": False, "space": False, "Shift_L": False, "Up": False, "Down": False,
                      "Escape": False}
     speed = 2
-    DONT_REPEAT = 60
+    DONT_REPEAT = 30
     dont_repeat = DONT_REPEAT
 
     def __init__(self, canvas: Canvas, x, y, runtime: Runtime):

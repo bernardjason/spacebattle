@@ -10,9 +10,9 @@ class Torpedo:
         self.ttl = 400
         self.x = x
         self.y = y
-        self.dirx = dirx
-        self.diry = diry
-        self.speed = 1
+        self.speed = 4
+        self.dirx = dirx * self.speed
+        self.diry = diry * self.speed
         self.start_rotation = 0 # start_rotation
         self.radius = 3
         self.img = canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, fill="red")

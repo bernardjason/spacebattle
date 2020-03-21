@@ -1,29 +1,41 @@
 from tkinter import *
 import math
-from Runtime import Runtime
+import Runtime
+from random import randint
+from random import random
 
 
 class Asteroid:
 
-    def __init__(self, canvas: Canvas, x, y):
+    def __init__(self, canvas: Canvas, x, y, size):
         self.x = x
         self.y = y
-        self.centre_x = 50
-        self.centre_y = 60
-        self.points = [self.x + 0, self.y + 0,
-                       self.x + 25, self.y + 60,
-                       self.x + 50, self.y + 120,
-                       self.x + 70, self.y + 70,
-                       self.x + 100, self.y + 25,
-                       self.x + 75, self.y + 0]
+        self.movex = randint(-1, 1) * random() / 2
+        self.movey = randint(-1, 1) * random() / 2
+        self.centre_x = 10 * size / 2
+        self.centre_y = 12 * size / 2
+        self.size = size
+        self.set_points()
         self.coords = self.points.copy()
-        self.img = canvas.create_polygon(self.points, outline="yellow", width=3)
+        self.img = canvas.create_polygon(self.points, fill='', outline="yellow", width=3)
+
+    def set_points(self):
+        self.points = [self.x, self.y + 5 * self.size,
+                       self.x + 10 * self.size, self.y + 8 * self.size,
+                       self.x + 10 * self.size, self.y - 8 * self.size,
+                       self.x - 4 * self.size, self.y - 10 * self.size,
+                       self.x - 16 * self.size, self.y - 2 * self.size,
+                       self.x - 4 * self.size, self.y + 6 * self.size
+                       ]
 
     def render(self, canvas: Canvas, rotation, playerx, playery):
         i = 0
         r = math.radians(rotation)
-        addx = playerx - Runtime.SCREEN_X / 2
-        addy = playery - Runtime.SCREEN_Y / 2
+        addx = playerx - Runtime.Runtime.SCREEN_X / 2
+        addy = playery - Runtime.Runtime.SCREEN_Y / 2
+        self.x = self.x + self.movex
+        self.y = self.y + self.movey
+        self.set_points()
 
         for x, y in zip(self.points[::2], self.points[1::2]):
             xx = x - playerx

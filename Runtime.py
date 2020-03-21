@@ -1,6 +1,7 @@
 from tkinter import *
 from time import time
 import PlayerShip
+from Asteroid import Asteroid
 
 
 class Runtime:
@@ -32,6 +33,19 @@ class Runtime:
     def unix_time_millis():
         return int(time() * 1000)
 
+    def asteroid_hit_logic(self, a: Asteroid):
+        offx=int(a.centre_x*1.25)
+        offy=int(a.centre_y*1.25)
+        if a.size > 1:
+            for xx in range(int(a.x) - offx, int(a.x) + offx, offx):
+                for yy in range(int(a.y) - offy,int(a.y)+offy,offy):
+                    self.add_asteroid(xx,yy, a.size / 2)
+
+    def add_asteroid(self, x, y, size):
+        child1 = Asteroid(self.main_canvas, x, y, int(size))
+        self.asteroids.append(child1)
+        self.render_list.append(child1)
+
     def render(self):
         start_time = self.unix_time_millis()
 
@@ -56,14 +70,16 @@ class Runtime:
             for pi in range(0, len(self.player.points), 2):
                 inside = self.point_inside_polygon(self.player.points[pi], self.player.points[pi + 1], a.coords)
                 if inside:
+                    self.asteroid_hit_logic(a)
                     self.asteroids.remove(a)
                     hitlist.append(a)
                     break
             for t in self.torpedos:
                 if t.ttl < 0:
                     self.torpedos.remove(t)
-                inside = self.point_inside_polygon(t.screenx,t.screeny,a.coords)
+                inside = self.point_inside_polygon(t.screenx, t.screeny, a.coords)
                 if inside:
+                    self.asteroid_hit_logic(a)
                     self.asteroids.remove(a)
                     self.torpedos.remove(t)
                     hitlist.append(a)
@@ -90,9 +106,9 @@ class Runtime:
 
         p1x = poly[0]
         p1y = poly[1]
-        for i in range(0,n + 1,2):
+        for i in range(0, n + 1, 2):
             p2x = poly[i % n]
-            p2y = poly[ (i % n) +1]
+            p2y = poly[(i % n) + 1]
             if y > min(p1y, p2y):
                 if y <= max(p1y, p2y):
                     if x <= max(p1x, p2x):
