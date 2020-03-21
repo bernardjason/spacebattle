@@ -2,7 +2,9 @@ from tkinter import *
 from time import time
 import PlayerShip
 from Asteroid import Asteroid
-
+from Radar import Radar
+import Sound
+import GameInfo
 
 class Runtime:
     tps = 0
@@ -11,9 +13,11 @@ class Runtime:
     SCREEN_X = 1024
     SCREEN_Y = 800
     player: PlayerShip
+    radar: Radar
     stars = list()
     asteroids = list()
     torpedos = list()
+    click = 0
 
     def __init__(self):
         self.master = Tk()
@@ -34,6 +38,7 @@ class Runtime:
         return int(time() * 1000)
 
     def asteroid_hit_logic(self, a: Asteroid):
+        GameInfo.hit_asteroid()
         offx=int(a.centre_x*1.25)
         offy=int(a.centre_y*1.25)
         if a.size > 1:
@@ -48,6 +53,10 @@ class Runtime:
 
     def render(self):
         start_time = self.unix_time_millis()
+        asteroid_hit = False
+        self.click = self.click + 1
+        if self.click % 60 == 0:
+            self.radar.update(self.main_canvas,self.player.x,self.player.y,self.player.rotation,self.asteroids)
 
         i = 0
         startx = int(round((self.player.x - self.SCREEN_X / 2 - self.SCREEN_X / 2) / self.SCREEN_X) * self.SCREEN_X)
@@ -67,19 +76,24 @@ class Runtime:
                 hitlist.append(r)
 
         for a in self.asteroids:
-            for pi in range(0, len(self.player.points), 2):
-                inside = self.point_inside_polygon(self.player.points[pi], self.player.points[pi + 1], a.coords)
-                if inside:
-                    self.asteroid_hit_logic(a)
-                    self.asteroids.remove(a)
-                    hitlist.append(a)
-                    break
+            if self.player.can_player_be_hit >= 0:
+                for pi in range(0, len(self.player.points), 2):
+                    inside = self.point_inside_polygon(self.player.points[pi], self.player.points[pi + 1], a.coords)
+                    if inside:
+                        GameInfo.player_hit()
+                        self.player.can_player_be_hit = -300
+                        self.asteroid_hit_logic(a)
+                        asteroid_hit = True
+                        self.asteroids.remove(a)
+                        hitlist.append(a)
+                        break
             for t in self.torpedos:
                 if t.ttl < 0:
                     self.torpedos.remove(t)
                 inside = self.point_inside_polygon(t.screenx, t.screeny, a.coords)
                 if inside:
                     self.asteroid_hit_logic(a)
+                    asteroid_hit = True
                     self.asteroids.remove(a)
                     self.torpedos.remove(t)
                     hitlist.append(a)
@@ -91,9 +105,15 @@ class Runtime:
                 self.render_list.remove(a)
             self.main_canvas.delete(a.img)
 
+        if asteroid_hit:
+            Sound.explode()
+
+        GameInfo.handle_game_over(self,self.main_canvas,Runtime.SCREEN_X,Runtime.SCREEN_Y,len(self.asteroids))
+
         self.tps = self.tps + 1
         since = (start_time - self.timeStarted) / 1000
-        self.topLabelText.set("TPS= " + str(round(self.tps / since)))
+        show = "TPS={} SCORE={} LIVES={}".format(str(round(self.tps / since)),GameInfo.score,GameInfo.lives)
+        self.topLabelText.set(show)
         elapsedTime = self.unix_time_millis() - start_time
         sleep = int(1000 / Runtime.REFRESH_RATE - elapsedTime)
 
