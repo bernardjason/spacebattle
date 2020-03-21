@@ -3,6 +3,7 @@ import Runtime
 import math
 from Torpedo import Torpedo
 import Sound
+import sys
 
 class PlayerShip:
     pressedStatus = {"Left": False, "Right": False, "space": False, "Shift_L": False, "Up": False, "Down": False,
@@ -46,7 +47,7 @@ class PlayerShip:
             canvas.itemconfig(self.img, outline=self.colour_list[self.runtime.click%len(self.colour_list)])
 
         if PlayerShip.pressedStatus["Escape"]:
-            exit(0)
+            sys.exit(0)
 
         if PlayerShip.pressedStatus["Left"]:
             self.rotation = self.rotation - 0.5
