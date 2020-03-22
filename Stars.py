@@ -33,7 +33,7 @@ class Stars:
             self.points[i + 2] = (self.x + xx + 1)
             self.points[i + 3] = (self.y + yy + 1)
 
-    def render(self, canvas: Canvas, rotation, playerx, playery):
+    def render(self, canvas: Canvas, rotation, playerx, playery,fps):
         i = 0
         r = math.radians(rotation)
         addx = playerx - Runtime.SCREEN_X / 2

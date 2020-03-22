@@ -7,11 +7,12 @@ import Sound
 import GameInfo
 
 class Runtime:
-    tps = 0
+    fps_counter = 1
+    fps = 1
     REFRESH_RATE = 60
     render_list = list()
-    SCREEN_X = 1024
-    SCREEN_Y = 800
+    SCREEN_X = 1920
+    SCREEN_Y = 1024
     player: PlayerShip
     radar: Radar
     stars = list()
@@ -55,7 +56,7 @@ class Runtime:
         start_time = self.unix_time_millis()
         asteroid_hit = False
         self.click = self.click + 1
-        if self.click % 60 == 0:
+        if self.click % self.fps == 0:
             self.radar.update(self.main_canvas,self.player.x,self.player.y,self.player.rotation,self.asteroids)
 
         i = 0
@@ -65,13 +66,10 @@ class Runtime:
             for yy in range(starty, int(starty + self.SCREEN_Y + 1), int(Runtime.SCREEN_Y / 2)):
                 self.stars[i].move_stars(xx, yy)
                 i = i + 1
-        if i != 9:
-            print(i)
-            exit(0)
 
         hitlist = list()
         for r in self.render_list:
-            delete_me = r.render(self.main_canvas, self.player.rotation, self.player.x, self.player.y)
+            delete_me = r.render(self.main_canvas, self.player.rotation, self.player.x, self.player.y,self.fps)
             if not delete_me:
                 hitlist.append(r)
 
@@ -110,9 +108,10 @@ class Runtime:
 
         GameInfo.handle_game_over(self,self.main_canvas,Runtime.SCREEN_X,Runtime.SCREEN_Y,len(self.asteroids))
 
-        self.tps = self.tps + 1
+        self.fps_counter = self.fps_counter + 1
         since = (start_time - self.timeStarted) / 1000
-        show = "TPS={} SCORE={} LIVES={}".format(str(round(self.tps / since)),GameInfo.score,GameInfo.lives)
+        self.fps =round(self.fps_counter / since )
+        show = "FPS={} SCORE={} LIVES={}".format(str(self.fps), GameInfo.score, GameInfo.lives)
         self.topLabelText.set(show)
         elapsedTime = self.unix_time_millis() - start_time
         sleep = int(1000 / Runtime.REFRESH_RATE - elapsedTime)

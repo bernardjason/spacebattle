@@ -30,7 +30,6 @@ class Radar:
         for x, y in zip(self.points[::2], self.points[1::2]):
             xx = x - self.middle - self.x
             yy = y - self.middle - self.y
-            print(xx, yy)
             self.coords[i] = xx * math.cos(r) + yy * math.sin(r) + self.middle + self.x
             self.coords[i + 1] = -xx * math.sin(r) + yy * math.cos(r) + self.middle + self.y
             i = i + 2

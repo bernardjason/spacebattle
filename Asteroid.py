@@ -10,8 +10,8 @@ class Asteroid:
     def __init__(self, canvas: Canvas, x, y, size):
         self.x = x
         self.y = y
-        self.movex = randint(-1, 1) * random() / 2
-        self.movey = randint(-1, 1) * random() / 2
+        self.movex = randint(-1, 1) * random() *30
+        self.movey = randint(-1, 1) * random() *30
         self.centre_x = 10 * size / 2
         self.centre_y = 12 * size / 2
         self.size = size
@@ -28,13 +28,13 @@ class Asteroid:
                        self.x - 4 * self.size, self.y + 6 * self.size
                        ]
 
-    def render(self, canvas: Canvas, rotation, playerx, playery):
+    def render(self, canvas: Canvas, rotation, playerx, playery,fps):
         i = 0
         r = math.radians(rotation)
         addx = playerx - Runtime.Runtime.SCREEN_X / 2
         addy = playery - Runtime.Runtime.SCREEN_Y / 2
-        self.x = self.x + self.movex
-        self.y = self.y + self.movey
+        self.x = self.x + self.movex/fps
+        self.y = self.y + self.movey/fps
         edge_multiplier = 1
         if self.x < -Runtime.Runtime.SCREEN_X*edge_multiplier or self.x > Runtime.Runtime.SCREEN_X*edge_multiplier:
             self.movex = self.movex * -1

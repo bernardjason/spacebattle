@@ -8,9 +8,8 @@ import sys
 class PlayerShip:
     pressedStatus = {"Left": False, "Right": False, "space": False, "Shift_L": False, "Up": False, "Down": False,
                      "Escape": False}
-    speed = 2
-    DONT_REPEAT = 30
-    dont_repeat = DONT_REPEAT
+    speed = 400
+    dont_repeat = 0
     can_player_be_hit = 0
 
     def __init__(self, canvas: Canvas, runtime: Runtime):
@@ -39,7 +38,7 @@ class PlayerShip:
         self.y = self.runtime.SCREEN_Y/2
 
     colour_list=['red','red','orange','orange','yellow','yellow']
-    def render(self, canvas: Canvas, dummy1, dummy2, dummy3):
+    def render(self, canvas: Canvas, dummy1, dummy2, dummy3,dummy4):
         self.can_player_be_hit = self.can_player_be_hit +1
         if ( self.can_player_be_hit >= 0):
             canvas.itemconfig(self.img, outline='white')
@@ -50,19 +49,20 @@ class PlayerShip:
             sys.exit(0)
 
         if PlayerShip.pressedStatus["Left"]:
-            self.rotation = self.rotation - 0.5
+            self.rotation = self.rotation - 50 / self.runtime.fps
 
         if PlayerShip.pressedStatus["Right"]:
-            self.rotation = self.rotation + 0.5
+            self.rotation = self.rotation + 50 / self.runtime.fps
 
         if PlayerShip.pressedStatus["Shift_L"]:
             r = math.radians(self.rotation - 90)
-            self.x = self.x + self.speed * math.cos(r)
-            self.y = self.y + self.speed * math.sin(r)
+            adjusted_speed = self.speed / self.runtime.fps
+            self.x = self.x + adjusted_speed * math.cos(r)
+            self.y = self.y + adjusted_speed * math.sin(r)
 
         if PlayerShip.pressedStatus["space"] and self.dont_repeat > 0:
             Sound.fire()
-            self.dont_repeat = - self.DONT_REPEAT
+            self.dont_repeat = - self.runtime.fps/3
             r = math.radians(self.rotation-90)
             dirx = math.cos(r)
             diry = math.sin(r)

@@ -7,21 +7,21 @@ import math
 class Torpedo:
 
     def __init__(self, canvas: Canvas, start_rotation, x, y, dirx, diry):
-        self.ttl = 400
+        self.ttl = 150
         self.x = x
         self.y = y
-        self.speed = 4
+        self.speed = 500
         self.dirx = dirx * self.speed
         self.diry = diry * self.speed
         self.start_rotation = 0 # start_rotation
-        self.radius = 3
+        self.radius = 4
         self.img = canvas.create_oval(self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius, fill="red")
         self.screenx = x - Runtime.Runtime.SCREEN_X / 2
         self.screeny = y - Runtime.Runtime.SCREEN_Y / 2
 
-    def render(self, canvas: Canvas, rotation, playerx, playery):
-        self.y = self.y + self.diry
-        self.x = self.x + self.dirx
+    def render(self, canvas: Canvas, rotation, playerx, playery,fps):
+        self.y = self.y + self.diry/fps
+        self.x = self.x + self.dirx/fps
 
         diff = rotation - self.start_rotation
 
