@@ -14,7 +14,9 @@ def start_game(runtime):
     lives = 3
     game_over = False
     start_again = 0
+    runtime.radar.reset(runtime.main_canvas)
     runtime.player.reset()
+    runtime.remove_all_asteroids()
 
     if debug:
         runtime.add_asteroid(runtime.SCREEN_X/2,runtime.SCREEN_Y-300,1)

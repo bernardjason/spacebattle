@@ -38,10 +38,8 @@ class Asteroid:
         edge_multiplier = 1
         if self.x < -Runtime.Runtime.SCREEN_X*edge_multiplier or self.x > Runtime.Runtime.SCREEN_X*edge_multiplier:
             self.movex = self.movex * -1
-            self.x = self.x + self.movex*2
         if self.y < -Runtime.Runtime.SCREEN_Y*edge_multiplier or self.y > Runtime.Runtime.SCREEN_Y*edge_multiplier:
             self.movey = self.movey * -1
-            self.y = self.y + self.movey*2
 
         self.set_points()
 

@@ -52,6 +52,13 @@ class Runtime:
         self.asteroids.append(child1)
         self.render_list.append(child1)
 
+    def remove_all_asteroids(self):
+        for a in self.asteroids:
+            if self.render_list.count(a) > 0:
+                self.render_list.remove(a)
+            self.main_canvas.delete(a.img)
+        self.asteroids.clear()
+
     def render(self):
         start_time = self.unix_time_millis()
         asteroid_hit = False

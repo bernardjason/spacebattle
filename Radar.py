@@ -37,12 +37,18 @@ class Radar:
         canvas.coords(self.player, self.coords)
         canvas.coords(self.front, self.coords[2] - 2, self.coords[3] - 2, self.coords[2] + 2, self.coords[3] + 2)
 
+    def reset(self,canvas:Canvas):
+        for i in self.show:
+            canvas.delete(i)
+        self.show.clear()
+
+
     def update(self, canvas: Canvas, x, y, rotation, asteroids):
         self.render(canvas, rotation)
         a: Asteroid
         scale = self.size /8
-        for i in self.show:
-            canvas.delete(i)
+
+        self.reset(canvas)
 
         for a in asteroids:
             xx = (a.x - x) / scale
